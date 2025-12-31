@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Converter Tool</title>
+
+<style>
+:root {
+  --primary: #1e90ff;
+  --light: #ffffff;
+  --bg: #f4f9ff;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: #333;
+}
+
+.converter-container {
+  max-width: 420px;
+  margin: 40px auto;
+  background: var(--light);
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed var(--primary);
+  border-radius: 10px;
+  background: #f0f8ff;
+  cursor: pointer;
+}
+
+.preview {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.preview img {
+  max-width: 100%;
+  border-radius: 10px;
+  display: none;
+}
+
+select, button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+}
+
+select {
+  background: #eef6ff;
+  border: 1px solid var(--primary);
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.download-btn {
+  display: none;
+  background: #0bbcd6;
+}
+
+@media (max-width: 480px) {
+  .converter-container {
+    margin: 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="converter-container">
+  <h1>Image Converter</h1>
+
+  <input type="file" id="upload" accept="image/*">
+
+  <div class="preview">
+    <img id="previewImage">
+  </div>
+
+  <select id="format">
+    <option value="image/png">Convert to PNG</option>
+    <option value="image/jpeg">Convert to JPG</option>
+    <option value="image/webp">Convert to WEBP</option>
+  </select>
+
+  <button onclick="convertImage()">Convert Image</button>
+  <button class="download-btn" id="downloadBtn">Download Image</button>
+</div>
+
+<script>
+const upload = document.getElementById("upload");
+const previewImage = document.getElementById("previewImage");
+const formatSelect = document.getElementById("format");
+const downloadBtn = document.getElementById("downloadBtn");
+
+let originalImage = new Image();
+let convertedURL = "";
+
+upload.addEventListener("change", () => {
+  const file = upload.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    originalImage.src = reader.result;
+    previewImage.src = reader.result;
+    previewImage.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+});
+
+function convertImage() {
+  if (!originalImage.src) {
+    alert("Please upload an image first.");
+    return;
+  }
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = originalImage.width;
+  canvas.height = originalImage.height;
+  ctx.drawImage(originalImage, 0, 0);
+
+  const format = formatSelect.value;
+  convertedURL = canvas.toDataURL(format, 0.9);
+
+  downloadBtn.style.display = "block";
+}
+
+downloadBtn.addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.href = convertedURL;
+
+  const extension = formatSelect.value.split("/")[1];
+  link.download = `converted-image.${extension}`;
+
+  link.click();
+});
+</script>
+
+</body>
+</html>
