@@ -6,107 +6,107 @@
 <title>Scientific Calculator</title>
 
 <style>
-:root{
-  --blue:#0d6efd;
-  --white:#ffffff;
-  --light:#f4f8ff;
-  --shadow:rgba(0,0,0,0.15);
+:root {
+  --blue: #0d6efd;
+  --light-blue: #eaf3ff;
+  --white: #ffffff;
+  --dark: #1f2937;
 }
 
-body{
-  margin:0;
-  font-family:Segoe UI, Tahoma, sans-serif;
-  background:linear-gradient(135deg,#e7f1ff,#ffffff);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--light-blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-.calculator{
-  width:100%;
-  max-width:420px;
-  background:var(--white);
-  border-radius:16px;
-  box-shadow:0 15px 35px var(--shadow);
-  overflow:hidden;
+.calculator {
+  background: var(--white);
+  width: 100%;
+  max-width: 420px;
+  border-radius: 14px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  padding: 20px;
 }
 
-.display{
-  background:var(--blue);
-  color:white;
-  padding:18px;
-  text-align:right;
+.display {
+  background: var(--light-blue);
+  border-radius: 10px;
+  padding: 15px;
+  text-align: right;
+  margin-bottom: 15px;
+  overflow: hidden;
 }
 
-.display .expression{
-  font-size:1rem;
-  opacity:.9;
-  word-wrap:break-word;
+.expression {
+  font-size: 14px;
+  color: #555;
+  min-height: 20px;
 }
 
-.display .result{
-  font-size:2rem;
-  font-weight:bold;
-  margin-top:6px;
+.result {
+  font-size: 28px;
+  color: var(--dark);
+  font-weight: bold;
+  word-wrap: break-word;
 }
 
-.buttons{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  padding:15px;
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
 }
 
-button{
-  padding:14px;
-  font-size:1rem;
-  border:none;
-  border-radius:10px;
-  background:var(--light);
-  cursor:pointer;
-  transition:.2s;
+button {
+  padding: 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--light-blue);
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-button:hover{
-  background:#dbe8ff;
+button:hover {
+  background: #d8e9ff;
 }
 
-.operator{
-  background:var(--blue);
-  color:white;
+button.operator {
+  background: var(--blue);
+  color: white;
 }
 
-.operator:hover{
-  background:#0b5ed7;
+button.operator:hover {
+  background: #084fc7;
 }
 
-.equal{
-  background:#198754;
-  color:white;
-  grid-column:span 2;
+button.equal {
+  grid-column: span 2;
+  background: #16a34a;
+  color: white;
 }
 
-.equal:hover{
-  background:#157347;
+button.equal:hover {
+  background: #12803a;
 }
 
-.clear{
-  background:#dc3545;
-  color:white;
+button.clear {
+  background: #ef4444;
+  color: white;
 }
 
-.clear:hover{
-  background:#bb2d3b;
+button.clear:hover {
+  background: #c73636;
 }
 
-@media(max-width:480px){
-  .calculator{
-    margin:10px;
-  }
-  button{
-    padding:12px;
-    font-size:.95rem;
+@media (max-width: 480px) {
+  .calculator {
+    max-width: 100%;
+    border-radius: 0;
+    height: 100vh;
   }
 }
 </style>
@@ -122,71 +122,91 @@ button:hover{
 
   <div class="buttons">
     <button class="clear" onclick="clearAll()">C</button>
-    <button onclick="del()">DEL</button>
     <button onclick="append('(')">(</button>
     <button onclick="append(')')">)</button>
+    <button onclick="append('Math.PI')">π</button>
+    <button class="operator" onclick="append('/')">÷</button>
 
-    <button onclick="appendFunc('sin')">sin</button>
-    <button onclick="appendFunc('cos')">cos</button>
-    <button onclick="appendFunc('tan')">tan</button>
+    <button onclick="append('Math.sin(')">sin</button>
+    <button onclick="append('Math.cos(')">cos</button>
+    <button onclick="append('Math.tan(')">tan</button>
     <button onclick="append('Math.sqrt(')">√</button>
+    <button class="operator" onclick="append('*')">×</button>
 
     <button onclick="append('Math.log10(')">log</button>
     <button onclick="append('Math.log(')">ln</button>
     <button onclick="append('**')">xʸ</button>
-    <button class="operator" onclick="append('/')">÷</button>
+    <button onclick="append('.')">.</button>
+    <button class="operator" onclick="append('-')">−</button>
 
     <button onclick="append('7')">7</button>
     <button onclick="append('8')">8</button>
     <button onclick="append('9')">9</button>
-    <button class="operator" onclick="append('*')">×</button>
+    <button onclick="append('+')">+</button>
+    <button class="operator" onclick="append('+')">+</button>
 
     <button onclick="append('4')">4</button>
     <button onclick="append('5')">5</button>
     <button onclick="append('6')">6</button>
-    <button class="operator" onclick="append('-')">−</button>
+    <button class="equal" onclick="calculate()">=</button>
 
     <button onclick="append('1')">1</button>
     <button onclick="append('2')">2</button>
     <button onclick="append('3')">3</button>
-    <button class="operator" onclick="append('+')">+</button>
-
     <button onclick="append('0')">0</button>
-    <button onclick="append('.')">.</button>
-    <button class="equal" onclick="calculate()">=</button>
   </div>
 </div>
 
 <script>
-const expEl = document.getElementById("expression");
-const resEl = document.getElementById("result");
+const expressionEl = document.getElementById("expression");
+const resultEl = document.getElementById("result");
 
-function append(value){
-  expEl.innerText += value;
+let expression = "";
+
+function append(value) {
+  expression += value;
+  expressionEl.textContent = expression;
+  liveCalculate();
 }
 
-function appendFunc(func){
-  expEl.innerText += Math.${func}(;
+function clearAll() {
+  expression = "";
+  expressionEl.textContent = "";
+  resultEl.textContent = "0";
 }
 
-function clearAll(){
-  expEl.innerText = "";
-  resEl.innerText = "0";
-}
-
-function del(){
-  expEl.innerText = expEl.innerText.slice(0,-1);
-}
-
-function calculate(){
-  try{
-    let result = eval(expEl.innerText);
-    resEl.innerText = Number.isFinite(result)
-      ? parseFloat(result.toFixed(10))
-      : "Error";
-  }catch{
-    resEl.innerText = "Error";
+function calculate() {
+  try {
+    let result = evalExpression(expression);
+    resultEl.textContent = result;
+    expression = result.toString();
+    expressionEl.textContent = expression;
+  } catch {
+    resultEl.textContent = "Error";
   }
+}
+
+function liveCalculate() {
+  try {
+    let result = evalExpression(expression);
+    resultEl.textContent = result;
+  } catch {
+    resultEl.textContent = "";
+  }
+}
+
+function evalExpression(expr) {
+  // Convert degrees to radians for trig
+  let safeExpr = expr
+    .replace(/Math\.sin\(/g, "Math.sin(deg(")
+    .replace(/Math\.cos\(/g, "Math.cos(deg(")
+    .replace(/Math\.tan\(/g, "Math.tan(deg(");
+
+  return +Function("deg", "return " + safeExpr)(deg);
+}
+
+function deg(x) {
+  return x * (Math.PI / 180);
 }
 </script>
 
